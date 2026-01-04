@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
+import { sendSMS } from '@/lib/sms';
 
 // Cron job endpoint to send appointment reminders
 // Should be called hourly or as needed
@@ -62,8 +63,8 @@ export async function GET(request: NextRequest) {
 
       // Send based on preferred contact method
       if (client.preferred_contact_method === 'sms' && client.phone) {
-        await sendSMS(client.phone, message);
-        sentCount++;
+        const result = await sendSMS(client.phone, message);
+        if (result.success) sentCount++;
       } else if (client.preferred_contact_method === 'email' && client.email) {
         await sendEmail(client.email, 'Appointment Reminder', message);
         sentCount++;
@@ -81,21 +82,6 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-async function sendSMS(phone: string, message: string): Promise<void> {
-  // In production, this would use Twilio
-  // const twilio = require('twilio')(
-  //   process.env.TWILIO_ACCOUNT_SID,
-  //   process.env.TWILIO_AUTH_TOKEN
-  // );
-  // await twilio.messages.create({
-  //   body: message,
-  //   from: process.env.TWILIO_PHONE_NUMBER,
-  //   to: phone,
-  // });
-
-  console.log(`[SMS] To: ${phone}, Message: ${message}`);
 }
 
 async function sendEmail(
