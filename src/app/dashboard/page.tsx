@@ -1,11 +1,20 @@
 import { AppShell } from '@/components/app-shell';
 import { StatsCard } from '@/components/ui/stats-card';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { dashboardStats, getTodayAppointments, zones } from '@/lib/mock-data';
+import { getDashboardStats, getTodaySchedule } from '@/lib/actions/dashboard';
+import { getZones } from '@/lib/actions/zones';
 import Link from 'next/link';
 
-export default function DashboardPage() {
-  const todayAppointments = getTodayAppointments();
+export default async function DashboardPage() {
+  const [stats, todayAppointments, zones] = await Promise.all([
+    getDashboardStats(),
+    getTodaySchedule(),
+    getZones(),
+  ]);
+
+  const completedToday = todayAppointments.filter(
+    (a) => a.status === 'completed'
+  ).length;
 
   return (
     <AppShell title="Dashboard">
@@ -13,7 +22,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Clients"
-          value={dashboardStats.totalClients}
+          value={stats.totalClients}
           icon={
             <svg
               className="h-5 w-5 text-slate-600 dark:text-slate-400"
@@ -32,8 +41,8 @@ export default function DashboardPage() {
         />
         <StatsCard
           title="Today's Appointments"
-          value={dashboardStats.todayAppointments}
-          subtitle={`${todayAppointments.filter((a) => a.status === 'completed').length} completed`}
+          value={stats.todayAppointments}
+          subtitle={`${completedToday} completed`}
           icon={
             <svg
               className="h-5 w-5 text-slate-600 dark:text-slate-400"
@@ -52,8 +61,7 @@ export default function DashboardPage() {
         />
         <StatsCard
           title="Week Revenue"
-          value={`$${dashboardStats.weekRevenue}`}
-          trend={{ value: 12, isPositive: true }}
+          value={`$${stats.weekRevenue.toLocaleString()}`}
           icon={
             <svg
               className="h-5 w-5 text-slate-600 dark:text-slate-400"
@@ -72,7 +80,7 @@ export default function DashboardPage() {
         />
         <StatsCard
           title="Completion Rate"
-          value={`${dashboardStats.completionRate}%`}
+          value={`${stats.completionRate}%`}
           icon={
             <svg
               className="h-5 w-5 text-slate-600 dark:text-slate-400"
@@ -109,37 +117,41 @@ export default function DashboardPage() {
             </div>
             <div className="divide-y divide-slate-200 dark:divide-slate-800">
               {todayAppointments.length > 0 ? (
-                todayAppointments.map((appointment) => (
-                  <div
-                    key={appointment.id}
-                    className="flex items-center gap-4 px-6 py-4"
-                  >
+                todayAppointments.map((appointment) => {
+                  const client = appointment.client as { id: string; name: string } | null;
+                  const service = appointment.service as { id: string; name: string } | null;
+                  const zone = appointment.zone as { id: string; name: string; color: string } | null;
+
+                  return (
                     <div
-                      className="h-10 w-1 rounded-full"
-                      style={{
-                        backgroundColor:
-                          zones.find((z) => z.id === appointment.zone)?.color ||
-                          '#6B7280',
-                      }}
-                    />
-                    <div className="flex-1">
-                      <p className="font-medium text-slate-900 dark:text-white">
-                        {appointment.client?.contactInfo.name}
-                      </p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {appointment.service?.name} &middot;{' '}
-                        {new Date(appointment.scheduledStart).toLocaleTimeString(
-                          [],
-                          { hour: '2-digit', minute: '2-digit' }
-                        )}
+                      key={appointment.id}
+                      className="flex items-center gap-4 px-6 py-4"
+                    >
+                      <div
+                        className="h-10 w-1 rounded-full"
+                        style={{
+                          backgroundColor: zone?.color || '#6B7280',
+                        }}
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-slate-900 dark:text-white">
+                          {client?.name || 'Unknown Client'}
+                        </p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                          {service?.name || 'Service'} &middot;{' '}
+                          {new Date(appointment.scheduled_start).toLocaleTimeString(
+                            [],
+                            { hour: '2-digit', minute: '2-digit' }
+                          )}
+                        </p>
+                      </div>
+                      <StatusBadge status={appointment.status} />
+                      <p className="text-sm font-medium text-slate-900 dark:text-white">
+                        ${Number(appointment.total_price).toFixed(0)}
                       </p>
                     </div>
-                    <StatusBadge status={appointment.status} />
-                    <p className="text-sm font-medium text-slate-900 dark:text-white">
-                      ${appointment.totalPrice}
-                    </p>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="px-6 py-8 text-center">
                   <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -160,7 +172,7 @@ export default function DashboardPage() {
             </h2>
             <div className="space-y-2">
               <Link
-                href="/clients"
+                href="/clients/new"
                 className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
               >
                 <svg
@@ -181,7 +193,7 @@ export default function DashboardPage() {
                 </span>
               </Link>
               <Link
-                href="/appointments"
+                href="/appointments/new"
                 className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
               >
                 <svg
@@ -218,24 +230,30 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="space-y-3">
-              {zones.slice(0, 4).map((zone) => (
-                <div key={zone.id} className="flex items-center gap-3">
-                  <div
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: zone.color }}
-                  />
-                  <span className="flex-1 text-sm text-slate-700 dark:text-slate-300">
-                    {zone.name}
-                  </span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">
-                    {zone.assignedDays
-                      .map((d) =>
-                        ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d]
-                      )
-                      .join(', ')}
-                  </span>
-                </div>
-              ))}
+              {zones.length > 0 ? (
+                zones.slice(0, 4).map((zone) => (
+                  <div key={zone.id} className="flex items-center gap-3">
+                    <div
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: zone.color }}
+                    />
+                    <span className="flex-1 text-sm text-slate-700 dark:text-slate-300">
+                      {zone.name}
+                    </span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {zone.assigned_days
+                        .map((d) =>
+                          ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d]
+                        )
+                        .join(', ')}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  No zones configured
+                </p>
+              )}
             </div>
           </div>
         </div>
