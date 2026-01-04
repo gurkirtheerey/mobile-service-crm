@@ -10,7 +10,7 @@ export default async function ZonesPage() {
   const addZoneButton = (
     <Link
       href="/settings/zones/new"
-      className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+      className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
     >
       <svg
         className="h-4 w-4"
@@ -32,10 +32,10 @@ export default async function ZonesPage() {
   return (
     <AppShell title="Zones" actions={addZoneButton}>
       {/* Info Banner */}
-      <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+      <div className="mb-6 rounded-xl border border-primary/30 bg-primary/10 p-4">
         <div className="flex items-start gap-3">
           <svg
-            className="h-5 w-5 text-blue-600 dark:text-blue-400"
+            className="h-5 w-5 text-primary"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -48,10 +48,10 @@ export default async function ZonesPage() {
             />
           </svg>
           <div>
-            <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
+            <p className="text-sm font-medium text-foreground">
               Zone-Based Scheduling
             </p>
-            <p className="mt-1 text-sm text-blue-700 dark:text-blue-400">
+            <p className="mt-1 text-sm text-foreground-secondary">
               Zones help you cluster appointments geographically to reduce drive
               time. Each zone has assigned service days and capacity limits.
             </p>
@@ -65,7 +65,7 @@ export default async function ZonesPage() {
           {zones.map((zone) => (
             <div
               key={zone.id}
-              className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+              className="rounded-xl border border-border bg-card p-6"
             >
               {/* Header */}
               <div className="flex items-start justify-between">
@@ -82,17 +82,17 @@ export default async function ZonesPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white">
+                    <h3 className="font-semibold text-foreground">
                       {zone.name}
                     </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm text-foreground-muted">
                       {zone.radius_miles} mile radius
                     </p>
                   </div>
                 </div>
                 <Link
                   href={`/settings/zones/${zone.id}/edit`}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                  className="rounded-lg p-1.5 text-foreground-muted hover:bg-muted hover:text-foreground-secondary"
                 >
                   <svg
                     className="h-4 w-4"
@@ -112,7 +112,7 @@ export default async function ZonesPage() {
 
               {/* Assigned Days */}
               <div className="mt-4">
-                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
                   Service Days
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
@@ -123,8 +123,8 @@ export default async function ZonesPage() {
                         key={day}
                         className={`rounded-md px-2 py-1 text-xs font-medium ${
                           isActive
-                            ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
-                            : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'
+                            ? 'bg-foreground text-background'
+                            : 'bg-muted text-foreground-muted'
                         }`}
                       >
                         {day}
@@ -136,30 +136,30 @@ export default async function ZonesPage() {
 
               {/* Capacity */}
               <div className="mt-4">
-                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
                   Daily Capacity
                 </p>
-                <p className="mt-1 text-sm text-slate-900 dark:text-white">
+                <p className="mt-1 text-sm text-foreground">
                   {zone.max_appointments_per_day} appointments &middot;{' '}
                   {zone.avg_service_duration_minutes} min avg
                 </p>
               </div>
 
               {/* Stats */}
-              <div className="mt-4 grid grid-cols-2 gap-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+              <div className="mt-4 grid grid-cols-2 gap-4 border-t border-border pt-4">
                 <div>
-                  <p className="text-2xl font-semibold text-slate-900 dark:text-white">
+                  <p className="text-2xl font-semibold text-foreground">
                     {zone.clientCount}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-foreground-muted">
                     Clients
                   </p>
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-slate-900 dark:text-white">
+                  <p className="text-2xl font-semibold text-foreground">
                     {zone.appointmentCount}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-foreground-muted">
                     Today&apos;s Appts
                   </p>
                 </div>
@@ -168,9 +168,9 @@ export default async function ZonesPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-border bg-card p-12 text-center">
           <svg
-            className="mx-auto h-12 w-12 text-slate-400"
+            className="mx-auto h-12 w-12 text-foreground-muted"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1}
@@ -187,15 +187,15 @@ export default async function ZonesPage() {
               d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-slate-900 dark:text-white">
+          <h3 className="mt-4 text-lg font-medium text-foreground">
             No zones configured
           </h3>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-sm text-foreground-muted">
             Get started by creating your first service zone.
           </p>
           <Link
             href="/settings/zones/new"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
           >
             Create Zone
           </Link>
@@ -204,26 +204,26 @@ export default async function ZonesPage() {
 
       {/* Zone Coverage Summary */}
       {zones.length > 0 && (
-        <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+        <div className="mt-8 rounded-xl border border-border bg-card p-6">
+          <h2 className="mb-4 text-lg font-semibold text-foreground">
             Weekly Coverage
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800">
-                  <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <tr className="border-b border-border">
+                  <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-foreground-muted">
                     Day
                   </th>
-                  <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-foreground-muted">
                     Active Zones
                   </th>
-                  <th className="pb-3 text-right text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <th className="pb-3 text-right text-xs font-medium uppercase tracking-wider text-foreground-muted">
                     Total Capacity
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+              <tbody className="divide-y divide-border">
                 {dayNames.map((day, index) => {
                   const activeZones = zones.filter((z) =>
                     z.assigned_days.includes(index)
@@ -235,7 +235,7 @@ export default async function ZonesPage() {
 
                   return (
                     <tr key={day}>
-                      <td className="py-3 font-medium text-slate-900 dark:text-white">
+                      <td className="py-3 font-medium text-foreground">
                         {day}
                       </td>
                       <td className="py-3">
@@ -258,13 +258,13 @@ export default async function ZonesPage() {
                               </span>
                             ))
                           ) : (
-                            <span className="text-sm text-slate-400 dark:text-slate-500">
+                            <span className="text-sm text-foreground-muted">
                               No zones scheduled
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="py-3 text-right text-slate-900 dark:text-white">
+                      <td className="py-3 text-right text-foreground">
                         {totalCapacity > 0 ? `${totalCapacity} slots` : '-'}
                       </td>
                     </tr>

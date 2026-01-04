@@ -102,17 +102,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-50 h-full w-64 transform bg-white transition-transform duration-200 ease-in-out dark:bg-slate-900 lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-50 h-full w-64 transform bg-card transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-full flex-col border-r border-slate-200 dark:border-slate-800">
+        <div className="flex h-full flex-col border-r border-border">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <svg
-                  className="h-5 w-5 text-white"
+                  className="h-5 w-5 text-primary-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
@@ -130,13 +130,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   />
                 </svg>
               </div>
-              <span className="text-lg font-semibold text-slate-900 dark:text-white">
+              <span className="text-lg font-semibold text-foreground">
                 ZoneCRM
               </span>
             </Link>
             <button
               onClick={onClose}
-              className="rounded-lg p-1 text-slate-500 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800"
+              className="rounded-lg p-1 text-foreground-muted hover:bg-muted lg:hidden"
             >
               <svg
                 className="h-5 w-5"
@@ -168,8 +168,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   onClick={() => onClose()}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                      ? 'bg-primary/20 text-primary-hover'
+                      : 'text-foreground-secondary hover:bg-muted'
                   }`}
                 >
                   {item.icon}
@@ -180,18 +180,18 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </nav>
 
           {/* User section */}
-          <div className="border-t border-slate-200 p-4 dark:border-slate-800">
+          <div className="border-t border-border p-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
+                <span className="text-sm font-medium text-foreground-secondary">
                   JD
                 </span>
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-foreground">
                   John Doe
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-foreground-muted">
                   Admin
                 </p>
               </div>

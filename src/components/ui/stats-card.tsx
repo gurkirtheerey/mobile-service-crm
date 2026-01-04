@@ -11,17 +11,17 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, subtitle, icon, trend }: StatsCardProps) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+          <p className="text-sm font-medium text-foreground-muted">
             {title}
           </p>
-          <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
+          <p className="mt-2 text-3xl font-semibold text-foreground">
             {value}
           </p>
           {subtitle && (
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-foreground-muted">
               {subtitle}
             </p>
           )}
@@ -29,8 +29,8 @@ export function StatsCard({ title, value, subtitle, icon, trend }: StatsCardProp
             <p
               className={`mt-2 text-sm font-medium ${
                 trend.isPositive
-                  ? 'text-green-600 dark:text-green-400'
-                  : 'text-red-600 dark:text-red-400'
+                  ? 'text-success'
+                  : 'text-error'
               }`}
             >
               {trend.isPositive ? '+' : ''}
@@ -39,7 +39,7 @@ export function StatsCard({ title, value, subtitle, icon, trend }: StatsCardProp
           )}
         </div>
         {icon && (
-          <div className="rounded-lg bg-slate-100 p-3 dark:bg-slate-800">
+          <div className="rounded-lg bg-muted p-3">
             {icon}
           </div>
         )}
