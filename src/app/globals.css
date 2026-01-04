@@ -110,58 +110,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark mode - deeper warm tones */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --dawn-pink: #2a2523;
-    --bizarre: #332e2b;
-    --dust-storm: #3d3532;
-    --blossom: #4a403c;
-    --clam-shell: #d1afa9;
-
-    --clam-shell-dark: #c29f98;
-    --clam-shell-darker: #b38f88;
-
-    --text-primary: #f1e9df;
-    --text-secondary: #d9cfc5;
-    --text-muted: #a99b94;
-
-    --background: var(--dawn-pink);
-    --background-secondary: var(--bizarre);
-    --foreground: var(--text-primary);
-    --foreground-secondary: var(--text-secondary);
-    --foreground-muted: var(--text-muted);
-
-    --primary: var(--clam-shell);
-    --primary-hover: var(--clam-shell-dark);
-    --primary-foreground: #2a2523;
-
-    --secondary: var(--blossom);
-    --secondary-hover: #5a4d48;
-    --secondary-foreground: var(--text-primary);
-
-    --card: var(--bizarre);
-    --card-hover: var(--dust-storm);
-
-    --border: var(--dust-storm);
-    --border-hover: var(--blossom);
-
-    --muted: var(--dust-storm);
-    --muted-foreground: var(--text-muted);
-
-    --accent: var(--blossom);
-    --accent-foreground: var(--text-primary);
-
-    --success: #8fb88f;
-    --success-bg: #2d332d;
-    --warning: #d4b668;
-    --warning-bg: #33302a;
-    --error: #d48888;
-    --error-bg: #332d2d;
-    --info: var(--clam-shell);
-    --info-bg: var(--bizarre);
-  }
-}
 
 body {
   background: var(--background);
@@ -186,14 +134,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--clam-shell);
-}
-
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-thumb {
-    background: var(--blossom);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--clam-shell);
-  }
 }
