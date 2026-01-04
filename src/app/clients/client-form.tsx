@@ -4,10 +4,11 @@ import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { createNewClient, updateClient } from '@/lib/actions/clients';
-import type { DbClient } from '@/types/database';
+import type { DbClient, DbZone } from '@/types/database';
 
 interface ClientFormProps {
-  client?: DbClient;
+  client?: DbClient & { zone?: { id: string; name: string; color: string } | null };
+  zones?: DbZone[];
   mode: 'create' | 'edit';
 }
 
@@ -16,7 +17,7 @@ interface FormState {
   data?: DbClient;
 }
 
-export function ClientForm({ client, mode }: ClientFormProps) {
+export function ClientForm({ client, zones = [], mode }: ClientFormProps) {
   const router = useRouter();
 
   const action = async (_prevState: FormState, formData: FormData): Promise<FormState> => {
@@ -203,6 +204,59 @@ export function ClientForm({ client, mode }: ClientFormProps) {
           </div>
         </div>
       </div>
+
+      {/* Zone Assignment */}
+      {zones.length > 0 && (
+        <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+            Zone Assignment
+          </h2>
+          <div>
+            <label
+              htmlFor="zoneId"
+              className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            >
+              Assigned Zone
+            </label>
+            <select
+              id="zoneId"
+              name="zoneId"
+              defaultValue={client?.assigned_zone_id || 'auto'}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+            >
+              <option value="auto">Auto-assign based on address</option>
+              {zones.map((zone) => (
+                <option key={zone.id} value={zone.id}>
+                  {zone.name}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
+              {mode === 'create'
+                ? 'Leave as auto-assign to let the system pick the best zone based on address.'
+                : 'Select a specific zone or leave as auto-assign to reassign based on address.'}
+            </p>
+            {client?.zone && (
+              <div className="mt-3 flex items-center gap-2">
+                <span className="text-sm text-slate-600 dark:text-slate-400">Current zone:</span>
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium"
+                  style={{
+                    backgroundColor: `${client.zone.color}20`,
+                    color: client.zone.color,
+                  }}
+                >
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ backgroundColor: client.zone.color }}
+                  />
+                  {client.zone.name}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Notes */}
       <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">

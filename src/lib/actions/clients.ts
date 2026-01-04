@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import type { InsertTables, UpdateTables, Json, DbClient } from '@/types/database';
+import type { InsertTables, UpdateTables, DbClient } from '@/types/database';
 import { assignToZone } from './zones';
 import { geocodeAddress } from '@/lib/geocoding';
 
@@ -102,8 +102,18 @@ export async function createNewClient(formData: FormData) {
   // Geocode the address
   const geocode = await geocodeAddress(`${street}, ${city}, ${state} ${zip}`);
 
-  // Find the best zone for this client
-  const zoneResult = await assignToZone(geocode.lat, geocode.lng);
+  // Check if a manual zone was selected
+  const manualZoneId = formData.get('zoneId') as string;
+  let assignedZoneId: string | null;
+
+  if (manualZoneId && manualZoneId !== 'auto') {
+    // Use manually selected zone
+    assignedZoneId = manualZoneId;
+  } else {
+    // Auto-assign zone based on location
+    const zoneResult = await assignToZone(geocode.lat, geocode.lng);
+    assignedZoneId = zoneResult?.zoneId || null;
+  }
 
   const clientData: InsertTables<'clients'> = {
     business_id: membership.business_id,
@@ -117,7 +127,7 @@ export async function createNewClient(formData: FormData) {
     zip,
     lat: geocode.lat,
     lng: geocode.lng,
-    assigned_zone_id: zoneResult?.zoneId || null,
+    assigned_zone_id: assignedZoneId,
     notes: formData.get('notes') as string || null,
     custom_fields: {},
   };
@@ -148,8 +158,18 @@ export async function updateClient(id: string, formData: FormData) {
   // Re-geocode if address changed
   const geocode = await geocodeAddress(`${street}, ${city}, ${state} ${zip}`);
 
-  // Re-assign zone based on new location
-  const zoneResult = await assignToZone(geocode.lat, geocode.lng);
+  // Check if a manual zone was selected
+  const manualZoneId = formData.get('zoneId') as string;
+  let assignedZoneId: string | null;
+
+  if (manualZoneId && manualZoneId !== 'auto') {
+    // Use manually selected zone
+    assignedZoneId = manualZoneId;
+  } else {
+    // Auto-assign zone based on location
+    const zoneResult = await assignToZone(geocode.lat, geocode.lng);
+    assignedZoneId = zoneResult?.zoneId || null;
+  }
 
   const updateData: UpdateTables<'clients'> = {
     name: formData.get('name') as string,
@@ -162,7 +182,7 @@ export async function updateClient(id: string, formData: FormData) {
     zip,
     lat: geocode.lat,
     lng: geocode.lng,
-    assigned_zone_id: zoneResult?.zoneId || null,
+    assigned_zone_id: assignedZoneId,
     notes: formData.get('notes') as string || null,
   };
 
@@ -179,6 +199,7 @@ export async function updateClient(id: string, formData: FormData) {
 
   revalidatePath('/clients');
   revalidatePath(`/clients/${id}`);
+  revalidatePath('/appointments');
   return { data };
 }
 
