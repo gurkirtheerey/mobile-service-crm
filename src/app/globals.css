@@ -1,27 +1,165 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --primary: #2563eb;
+  /* Color Palette - Warm Blush Theme */
+  --dawn-pink: #f1e9df;
+  --bizarre: #edded9;
+  --dust-storm: #e9d6d2;
+  --blossom: #ddbfbb;
+  --clam-shell: #d1afa9;
+
+  /* Derived darker shades for contrast */
+  --clam-shell-dark: #b8938c;
+  --clam-shell-darker: #9f7a73;
+
+  /* Text colors - warm brown tones for harmony */
+  --text-primary: #4a3833;
+  --text-secondary: #6b5550;
+  --text-muted: #8b7570;
+
+  /* Semantic color mapping */
+  --background: var(--dawn-pink);
+  --background-secondary: var(--bizarre);
+  --foreground: var(--text-primary);
+  --foreground-secondary: var(--text-secondary);
+  --foreground-muted: var(--text-muted);
+
+  --primary: var(--clam-shell);
+  --primary-hover: var(--clam-shell-dark);
   --primary-foreground: #ffffff;
+
+  --secondary: var(--blossom);
+  --secondary-hover: var(--clam-shell);
+  --secondary-foreground: var(--text-primary);
+
+  --card: var(--bizarre);
+  --card-hover: var(--dust-storm);
+
+  --border: var(--dust-storm);
+  --border-hover: var(--blossom);
+
+  --muted: var(--dust-storm);
+  --muted-foreground: var(--text-muted);
+
+  --accent: var(--blossom);
+  --accent-foreground: var(--text-primary);
+
+  /* Status colors - softened to match theme */
+  --success: #7da87d;
+  --success-bg: #e8f0e8;
+  --warning: #c9a857;
+  --warning-bg: #f5f0e0;
+  --error: #c27878;
+  --error-bg: #f5e8e8;
+  --info: var(--clam-shell);
+  --info-bg: var(--bizarre);
 }
 
 @theme inline {
+  /* Base colors */
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+
+  /* Primary */
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+
+  /* Secondary */
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Card */
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+
+  /* Border */
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+
+  /* Muted */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  /* Accent */
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Palette colors for direct use */
+  --color-dawn-pink: var(--dawn-pink);
+  --color-bizarre: var(--bizarre);
+  --color-dust-storm: var(--dust-storm);
+  --color-blossom: var(--blossom);
+  --color-clam-shell: var(--clam-shell);
+
+  /* Status colors */
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-error: var(--error);
+  --color-error-bg: var(--error-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode - deeper warm tones */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020617;
-    --foreground: #f1f5f9;
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
+    --dawn-pink: #2a2523;
+    --bizarre: #332e2b;
+    --dust-storm: #3d3532;
+    --blossom: #4a403c;
+    --clam-shell: #d1afa9;
+
+    --clam-shell-dark: #c29f98;
+    --clam-shell-darker: #b38f88;
+
+    --text-primary: #f1e9df;
+    --text-secondary: #d9cfc5;
+    --text-muted: #a99b94;
+
+    --background: var(--dawn-pink);
+    --background-secondary: var(--bizarre);
+    --foreground: var(--text-primary);
+    --foreground-secondary: var(--text-secondary);
+    --foreground-muted: var(--text-muted);
+
+    --primary: var(--clam-shell);
+    --primary-hover: var(--clam-shell-dark);
+    --primary-foreground: #2a2523;
+
+    --secondary: var(--blossom);
+    --secondary-hover: #5a4d48;
+    --secondary-foreground: var(--text-primary);
+
+    --card: var(--bizarre);
+    --card-hover: var(--dust-storm);
+
+    --border: var(--dust-storm);
+    --border-hover: var(--blossom);
+
+    --muted: var(--dust-storm);
+    --muted-foreground: var(--text-muted);
+
+    --accent: var(--blossom);
+    --accent-foreground: var(--text-primary);
+
+    --success: #8fb88f;
+    --success-bg: #2d332d;
+    --warning: #d4b668;
+    --warning-bg: #33302a;
+    --error: #d48888;
+    --error-bg: #332d2d;
+    --info: var(--clam-shell);
+    --info-bg: var(--bizarre);
   }
 }
 
@@ -42,20 +180,20 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--blossom);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--clam-shell);
 }
 
 @media (prefers-color-scheme: dark) {
   ::-webkit-scrollbar-thumb {
-    background: #475569;
+    background: var(--blossom);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
+    background: var(--clam-shell);
   }
 }

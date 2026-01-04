@@ -10,22 +10,22 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center dark:border-slate-700 dark:bg-slate-900/50">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-background-secondary px-6 py-12 text-center">
       {icon && (
-        <div className="mb-4 text-slate-400 dark:text-slate-500">{icon}</div>
+        <div className="mb-4 text-foreground-muted">{icon}</div>
       )}
-      <h3 className="text-sm font-medium text-slate-900 dark:text-white">
+      <h3 className="text-sm font-medium text-foreground">
         {title}
       </h3>
       {description && (
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-sm text-foreground-muted">
           {description}
         </p>
       )}
       {action && (
         <button
           onClick={action.onClick}
-          className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           {action.label}
         </button>

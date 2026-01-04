@@ -25,7 +25,7 @@ export default async function DashboardPage() {
           value={stats.totalClients}
           icon={
             <svg
-              className="h-5 w-5 text-slate-600 dark:text-slate-400"
+              className="h-5 w-5 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
           subtitle={`${completedToday} completed`}
           icon={
             <svg
-              className="h-5 w-5 text-slate-600 dark:text-slate-400"
+              className="h-5 w-5 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
           value={`$${stats.weekRevenue.toLocaleString()}`}
           icon={
             <svg
-              className="h-5 w-5 text-slate-600 dark:text-slate-400"
+              className="h-5 w-5 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
           value={`${stats.completionRate}%`}
           icon={
             <svg
-              className="h-5 w-5 text-slate-600 dark:text-slate-400"
+              className="h-5 w-5 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
@@ -103,19 +103,19 @@ export default async function DashboardPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         {/* Today's Schedule */}
         <div className="lg:col-span-2">
-          <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+          <div className="rounded-xl border border-border bg-card">
+            <div className="flex items-center justify-between border-b border-border px-6 py-4">
+              <h2 className="text-lg font-semibold text-foreground">
                 Today&apos;s Schedule
               </h2>
               <Link
                 href="/appointments"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                className="text-sm font-medium text-primary hover:text-primary-hover"
               >
                 View all
               </Link>
             </div>
-            <div className="divide-y divide-slate-200 dark:divide-slate-800">
+            <div className="divide-y divide-border">
               {todayAppointments.length > 0 ? (
                 todayAppointments.map((appointment) => {
                   const client = appointment.client as { id: string; name: string } | null;
@@ -134,10 +134,10 @@ export default async function DashboardPage() {
                         }}
                       />
                       <div className="flex-1">
-                        <p className="font-medium text-slate-900 dark:text-white">
+                        <p className="font-medium text-foreground">
                           {client?.name || 'Unknown Client'}
                         </p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                        <p className="text-sm text-foreground-muted">
                           {service?.name || 'Service'} &middot;{' '}
                           {new Date(appointment.scheduled_start).toLocaleTimeString(
                             [],
@@ -146,7 +146,7 @@ export default async function DashboardPage() {
                         </p>
                       </div>
                       <StatusBadge status={appointment.status} />
-                      <p className="text-sm font-medium text-slate-900 dark:text-white">
+                      <p className="text-sm font-medium text-foreground">
                         ${Number(appointment.total_price).toFixed(0)}
                       </p>
                     </div>
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
                 })
               ) : (
                 <div className="px-6 py-8 text-center">
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-foreground-muted">
                     No appointments scheduled for today
                   </p>
                 </div>
@@ -166,17 +166,17 @@ export default async function DashboardPage() {
         {/* Quick Actions & Zones */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
               Quick Actions
             </h2>
             <div className="space-y-2">
               <Link
                 href="/clients/new"
-                className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                className="flex w-full items-center gap-3 rounded-lg border border-border px-4 py-3 text-left transition-colors hover:bg-muted"
               >
                 <svg
-                  className="h-5 w-5 text-slate-500"
+                  className="h-5 w-5 text-foreground-muted"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
@@ -188,16 +188,16 @@ export default async function DashboardPage() {
                     d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
                   />
                 </svg>
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <span className="text-sm font-medium text-foreground-secondary">
                   Add New Client
                 </span>
               </Link>
               <Link
                 href="/appointments/new"
-                className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                className="flex w-full items-center gap-3 rounded-lg border border-border px-4 py-3 text-left transition-colors hover:bg-muted"
               >
                 <svg
-                  className="h-5 w-5 text-slate-500"
+                  className="h-5 w-5 text-foreground-muted"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
@@ -209,7 +209,7 @@ export default async function DashboardPage() {
                     d="M12 4.5v15m7.5-7.5h-15"
                   />
                 </svg>
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <span className="text-sm font-medium text-foreground-secondary">
                   Schedule Appointment
                 </span>
               </Link>
@@ -217,14 +217,14 @@ export default async function DashboardPage() {
           </div>
 
           {/* Zones Overview */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-xl border border-border bg-card p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-foreground">
                 Zones
               </h2>
               <Link
                 href="/settings/zones"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                className="text-sm font-medium text-primary hover:text-primary-hover"
               >
                 Manage
               </Link>
@@ -237,10 +237,10 @@ export default async function DashboardPage() {
                       className="h-3 w-3 rounded-full"
                       style={{ backgroundColor: zone.color }}
                     />
-                    <span className="flex-1 text-sm text-slate-700 dark:text-slate-300">
+                    <span className="flex-1 text-sm text-foreground-secondary">
                       {zone.name}
                     </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="text-xs text-foreground-muted">
                       {zone.assigned_days
                         .map((d) =>
                           ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d]
@@ -250,7 +250,7 @@ export default async function DashboardPage() {
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-foreground-muted">
                   No zones configured
                 </p>
               )}
