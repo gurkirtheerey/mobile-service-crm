@@ -66,11 +66,6 @@ export function AppointmentForm({ clients, services, zones }: AppointmentFormPro
       return;
     }
 
-    if (!selectedClient?.assigned_zone_id) {
-      setError('Selected client is not assigned to a zone. Please update the client first.');
-      return;
-    }
-
     const formData = new FormData(e.currentTarget);
 
     startTransition(async () => {
@@ -150,9 +145,24 @@ export function AppointmentForm({ clients, services, zones }: AppointmentFormPro
                 )}
               </p>
             ) : (
-              <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">
-                No zone assigned - client needs zone assignment before booking
-              </p>
+              <div className="mt-2">
+                <label htmlFor="zoneId" className="block text-sm font-medium text-amber-600 dark:text-amber-400">
+                  No zone assigned - select a zone for this appointment:
+                </label>
+                <select
+                  id="zoneId"
+                  name="zoneId"
+                  required
+                  className="mt-1 w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-amber-700 dark:bg-slate-800"
+                >
+                  <option value="">Select a zone</option>
+                  {zones.map((zone) => (
+                    <option key={zone.id} value={zone.id}>
+                      {zone.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
         )}
