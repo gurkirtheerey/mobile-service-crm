@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { AppShell } from '@/components/app-shell';
 import { ClientForm } from '../../client-form';
 import { getClientById } from '@/lib/actions/clients';
+import { getZones } from '@/lib/actions/zones';
 
 interface EditClientPageProps {
   params: Promise<{ id: string }>;
@@ -12,8 +13,12 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
   const { id } = await params;
 
   let client;
+  let zones;
   try {
-    client = await getClientById(id);
+    [client, zones] = await Promise.all([
+      getClientById(id),
+      getZones(),
+    ]);
   } catch {
     notFound();
   }
@@ -48,7 +53,7 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
       </div>
 
       <div className="mx-auto max-w-2xl">
-        <ClientForm client={client} mode="edit" />
+        <ClientForm client={client} zones={zones} mode="edit" />
       </div>
     </AppShell>
   );

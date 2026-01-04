@@ -180,7 +180,7 @@ export async function createAppointment(formData: FormData) {
   const scheduledEnd = new Date(scheduledStart);
   scheduledEnd.setMinutes(scheduledEnd.getMinutes() + (service.duration_minutes || 60));
 
-  // Get client's zone
+  // Get client's zone or use provided zone
   const clientId = formData.get('clientId') as string;
   const { data: client } = await supabase
     .from('clients')
@@ -188,15 +188,22 @@ export async function createAppointment(formData: FormData) {
     .eq('id', clientId)
     .single();
 
-  if (!client || !client.assigned_zone_id) {
-    return { error: 'Client not found or not assigned to a zone' };
+  if (!client) {
+    return { error: 'Client not found' };
+  }
+
+  // Use client's zone if assigned, otherwise use the zone provided in the form
+  const zoneId = client.assigned_zone_id || (formData.get('zoneId') as string);
+
+  if (!zoneId) {
+    return { error: 'Please select a zone for this appointment' };
   }
 
   const appointmentData: InsertTables<'appointments'> = {
     business_id: membership.business_id,
     client_id: clientId,
     service_id: serviceId,
-    zone_id: client.assigned_zone_id,
+    zone_id: zoneId,
     scheduled_start: scheduledStart.toISOString(),
     scheduled_end: scheduledEnd.toISOString(),
     status: 'scheduled',
