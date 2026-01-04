@@ -20,6 +20,10 @@ export type Database = {
           service_area: string;
           config: Json;
           owner_id: string;
+          stripe_customer_id: string | null;
+          stripe_subscription_id: string | null;
+          subscription_status: string | null;
+          subscription_current_period_end: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -30,6 +34,10 @@ export type Database = {
           service_area: string;
           config?: Json;
           owner_id: string;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id?: string | null;
+          subscription_status?: string | null;
+          subscription_current_period_end?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -40,6 +48,10 @@ export type Database = {
           service_area?: string;
           config?: Json;
           owner_id?: string;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id?: string | null;
+          subscription_status?: string | null;
+          subscription_current_period_end?: string | null;
           created_at?: string;
           updated_at?: string;
         };

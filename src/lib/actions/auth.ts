@@ -58,7 +58,8 @@ export async function signUp(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/dashboard');
+  // Redirect to payment page for subscription setup
+  redirect('/onboarding/payment');
 }
 
 export async function signIn(formData: FormData) {
