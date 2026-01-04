@@ -1,11 +1,13 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 export async function signUp(formData: FormData) {
   const supabase = await createClient();
+  // Use admin client to bypass RLS for initial business setup
+  const adminClient = createAdminClient();
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -26,8 +28,8 @@ export async function signUp(formData: FormData) {
     return { error: 'Failed to create user' };
   }
 
-  // Create the business
-  const { data: business, error: businessError } = await supabase
+  // Create the business using admin client (bypasses RLS)
+  const { data: business, error: businessError } = await adminClient
     .from('businesses')
     .insert({
       name: businessName,
@@ -42,8 +44,8 @@ export async function signUp(formData: FormData) {
     return { error: businessError.message };
   }
 
-  // Add owner as admin member
-  const { error: memberError } = await supabase
+  // Add owner as admin member using admin client
+  const { error: memberError } = await adminClient
     .from('business_members')
     .insert({
       business_id: business.id,
