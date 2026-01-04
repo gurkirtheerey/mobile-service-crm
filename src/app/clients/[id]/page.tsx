@@ -2,11 +2,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { AppShell } from '@/components/app-shell';
 import { StatusBadge } from '@/components/ui/status-badge';
-import {
-  getClientById,
-  getAppointmentsByClientId,
-  zones,
-} from '@/lib/mock-data';
+import { getClientById } from '@/lib/actions/clients';
+import { getAppointments } from '@/lib/actions/appointments';
 
 interface ClientDetailPageProps {
   params: Promise<{ id: string }>;
@@ -14,17 +11,30 @@ interface ClientDetailPageProps {
 
 export default async function ClientDetailPage({ params }: ClientDetailPageProps) {
   const { id } = await params;
-  const client = getClientById(id);
+
+  let client;
+  try {
+    client = await getClientById(id);
+  } catch {
+    notFound();
+  }
 
   if (!client) {
     notFound();
   }
 
-  const appointments = getAppointmentsByClientId(id);
-  const zone = zones.find((z) => z.id === client.assignedZone);
+  const appointments = await getAppointments({ clientId: id });
+  const zone = client.zone as { id: string; name: string; color: string } | null;
+
+  const totalRevenue = appointments
+    .filter((a) => a.status === 'completed')
+    .reduce((sum, a) => sum + Number(a.total_price), 0);
 
   const editButton = (
-    <button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
+    <Link
+      href={`/clients/${id}/edit`}
+      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+    >
       <svg
         className="h-4 w-4"
         fill="none"
@@ -39,11 +49,11 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
         />
       </svg>
       Edit
-    </button>
+    </Link>
   );
 
   return (
-    <AppShell title={client.contactInfo.name} actions={editButton}>
+    <AppShell title={client.name} actions={editButton}>
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link
@@ -81,7 +91,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Name
                 </dt>
                 <dd className="mt-1 text-slate-900 dark:text-white">
-                  {client.contactInfo.name}
+                  {client.name}
                 </dd>
               </div>
               <div>
@@ -89,7 +99,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Phone
                 </dt>
                 <dd className="mt-1 text-slate-900 dark:text-white">
-                  {client.contactInfo.phone}
+                  {client.phone || 'Not provided'}
                 </dd>
               </div>
               <div>
@@ -97,7 +107,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Email
                 </dt>
                 <dd className="mt-1 text-slate-900 dark:text-white">
-                  {client.contactInfo.email}
+                  {client.email || 'Not provided'}
                 </dd>
               </div>
               <div>
@@ -105,7 +115,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Preferred Contact
                 </dt>
                 <dd className="mt-1 capitalize text-slate-900 dark:text-white">
-                  {client.contactInfo.preferredContactMethod}
+                  {client.preferred_contact_method}
                 </dd>
               </div>
             </dl>
@@ -119,11 +129,10 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-slate-900 dark:text-white">
-                  {client.serviceAddress.street}
+                  {client.street}
                 </p>
                 <p className="text-slate-500 dark:text-slate-400">
-                  {client.serviceAddress.city}, {client.serviceAddress.state}{' '}
-                  {client.serviceAddress.zip}
+                  {client.city}, {client.state} {client.zip}
                 </p>
               </div>
               {zone && (
@@ -156,31 +165,34 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
             </div>
             {appointments.length > 0 ? (
               <div className="divide-y divide-slate-200 dark:divide-slate-800">
-                {appointments.map((apt) => (
-                  <div
-                    key={apt.id}
-                    className="flex items-center justify-between px-6 py-4"
-                  >
-                    <div>
-                      <p className="font-medium text-slate-900 dark:text-white">
-                        {apt.service?.name}
-                      </p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {new Date(apt.scheduledStart).toLocaleDateString()} at{' '}
-                        {new Date(apt.scheduledStart).toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
+                {appointments.map((apt) => {
+                  const service = apt.service as { name: string } | null;
+                  return (
+                    <div
+                      key={apt.id}
+                      className="flex items-center justify-between px-6 py-4"
+                    >
+                      <div>
+                        <p className="font-medium text-slate-900 dark:text-white">
+                          {service?.name || 'Service'}
+                        </p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                          {new Date(apt.scheduled_start).toLocaleDateString()} at{' '}
+                          {new Date(apt.scheduled_start).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <StatusBadge status={apt.status} />
+                        <span className="font-medium text-slate-900 dark:text-white">
+                          ${Number(apt.total_price).toFixed(0)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <StatusBadge status={apt.status} />
-                      <span className="font-medium text-slate-900 dark:text-white">
-                        ${apt.totalPrice}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="px-6 py-8 text-center">
@@ -213,10 +225,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Total Revenue
                 </dt>
                 <dd className="font-medium text-slate-900 dark:text-white">
-                  $
-                  {appointments
-                    .filter((a) => a.status === 'completed')
-                    .reduce((sum, a) => sum + a.totalPrice, 0)}
+                  ${totalRevenue.toFixed(0)}
                 </dd>
               </div>
               <div className="flex items-center justify-between">
@@ -224,7 +233,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                   Client Since
                 </dt>
                 <dd className="font-medium text-slate-900 dark:text-white">
-                  {new Date(client.createdAt).toLocaleDateString()}
+                  {new Date(client.created_at).toLocaleDateString()}
                 </dd>
               </div>
             </dl>
@@ -236,7 +245,10 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
               Actions
             </h2>
             <div className="space-y-2">
-              <button className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800">
+              <Link
+                href={`/appointments/new?clientId=${id}`}
+                className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+              >
                 <svg
                   className="h-5 w-5 text-slate-500"
                   fill="none"
@@ -253,7 +265,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Schedule Appointment
                 </span>
-              </button>
+              </Link>
               <button className="flex w-full items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800">
                 <svg
                   className="h-5 w-5 text-slate-500"
