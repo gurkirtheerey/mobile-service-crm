@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { StatsCard } from '@/components/ui/stats-card';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { getDashboardStats, getTodaySchedule } from '@/lib/actions/dashboard';
@@ -17,7 +17,8 @@ export default async function DashboardPage() {
   ).length;
 
   return (
-    <AppShell title="Dashboard">
+    <>
+      <PageHeader title="Dashboard" />
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
@@ -258,6 +259,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-    </AppShell>
+    </>
   );
 }

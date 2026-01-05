@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { getAppointments } from '@/lib/actions/appointments';
 import { getZones } from '@/lib/actions/zones';
 import Link from 'next/link';
@@ -39,8 +39,9 @@ export default async function AppointmentsPage() {
   );
 
   return (
-    <AppShell title="Appointments" actions={addAppointmentButton}>
+    <>
+      <PageHeader title="Appointments" actions={addAppointmentButton} />
       <AppointmentsCalendar appointments={appointments} zones={zones} />
-    </AppShell>
+    </>
   );
 }

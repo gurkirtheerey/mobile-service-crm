@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { getServices } from '@/lib/actions/services';
 import Link from 'next/link';
 import { ServicesTable } from './services-table';
@@ -29,7 +29,8 @@ export default async function ServicesPage() {
   );
 
   return (
-    <AppShell title="Services" actions={addServiceButton}>
+    <>
+      <PageHeader title="Services" actions={addServiceButton} />
       {/* Info Banner */}
       <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
         <div className="flex items-start gap-3">
@@ -90,6 +91,6 @@ export default async function ServicesPage() {
           </Link>
         </div>
       )}
-    </AppShell>
+    </>
   );
 }

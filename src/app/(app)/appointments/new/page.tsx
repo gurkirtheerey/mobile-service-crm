@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { getClients } from '@/lib/actions/clients';
 import { getServices } from '@/lib/actions/services';
 import { getZones } from '@/lib/actions/zones';
@@ -39,7 +39,8 @@ export default async function NewAppointmentPage() {
   const hasServices = services.length > 0;
 
   return (
-    <AppShell title="New Appointment" actions={backButton}>
+    <>
+      <PageHeader title="New Appointment" actions={backButton} />
       <div className="mx-auto max-w-2xl">
         <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           {!hasClients || !hasServices ? (
@@ -87,6 +88,6 @@ export default async function NewAppointmentPage() {
           )}
         </div>
       </div>
-    </AppShell>
+    </>
   );
 }

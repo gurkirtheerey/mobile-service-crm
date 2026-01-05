@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { ClientForm } from '../client-form';
 import { getZones } from '@/lib/actions/zones';
 
@@ -7,7 +7,8 @@ export default async function NewClientPage() {
   const zones = await getZones();
 
   return (
-    <AppShell title="Add Client">
+    <>
+      <PageHeader title="Add Client" />
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link
@@ -34,6 +35,6 @@ export default async function NewClientPage() {
       <div className="mx-auto max-w-2xl">
         <ClientForm zones={zones} mode="create" />
       </div>
-    </AppShell>
+    </>
   );
 }

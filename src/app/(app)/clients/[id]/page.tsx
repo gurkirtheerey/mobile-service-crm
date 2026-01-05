@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { getClientById } from '@/lib/actions/clients';
 import { getAppointments } from '@/lib/actions/appointments';
@@ -54,7 +54,8 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
   );
 
   return (
-    <AppShell title={client.name} actions={editButton}>
+    <>
+      <PageHeader title={client.name} actions={editButton} />
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link
@@ -276,6 +277,6 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
           </div>
         </div>
       </div>
-    </AppShell>
+    </>
   );
 }

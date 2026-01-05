@@ -1,11 +1,11 @@
-import { AppShell } from '@/components/app-shell';
-import { ServiceForm } from './service-form';
+import { PageHeader } from '@/components/page-header';
+import { ZoneForm } from './zone-form';
 import Link from 'next/link';
 
-export default function NewServicePage() {
+export default function NewZonePage() {
   const backButton = (
     <Link
-      href="/settings/services"
+      href="/settings/zones"
       className="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
     >
       <svg
@@ -26,12 +26,11 @@ export default function NewServicePage() {
   );
 
   return (
-    <AppShell title="New Service" actions={backButton}>
+    <>
+      <PageHeader title="New Zone" actions={backButton} />
       <div className="mx-auto max-w-2xl">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-          <ServiceForm />
-        </div>
+        <ZoneForm />
       </div>
-    </AppShell>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { getClients } from '@/lib/actions/clients';
 import { getZones } from '@/lib/actions/zones';
 import Link from 'next/link';
@@ -33,8 +33,9 @@ export default async function ClientsPage() {
   );
 
   return (
-    <AppShell title="Clients" actions={addClientButton}>
+    <>
+      <PageHeader title="Clients" actions={addClientButton} />
       <ClientsTable clients={clients} zones={zones} />
-    </AppShell>
+    </>
   );
 }

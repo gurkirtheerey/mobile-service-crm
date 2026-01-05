@@ -1,4 +1,4 @@
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { getZonesWithStats } from '@/lib/actions/zones';
 import Link from 'next/link';
 
@@ -30,7 +30,8 @@ export default async function ZonesPage() {
   );
 
   return (
-    <AppShell title="Zones" actions={addZoneButton}>
+    <>
+      <PageHeader title="Zones" actions={addZoneButton} />
       {/* Info Banner */}
       <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
         <div className="flex items-start gap-3">
@@ -275,6 +276,6 @@ export default async function ZonesPage() {
           </div>
         </div>
       )}
-    </AppShell>
+    </>
   );
 }

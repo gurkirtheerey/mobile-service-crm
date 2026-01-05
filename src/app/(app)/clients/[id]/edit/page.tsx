@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { AppShell } from '@/components/app-shell';
+import { PageHeader } from '@/components/page-header';
 import { ClientForm } from '../../client-form';
 import { getClientById } from '@/lib/actions/clients';
 import { getZones } from '@/lib/actions/zones';
@@ -28,7 +28,8 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
   }
 
   return (
-    <AppShell title={`Edit ${client.name}`}>
+    <>
+      <PageHeader title={`Edit ${client.name}`} />
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link
@@ -55,6 +56,6 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
       <div className="mx-auto max-w-2xl">
         <ClientForm client={client} zones={zones} mode="edit" />
       </div>
-    </AppShell>
+    </>
   );
 }
