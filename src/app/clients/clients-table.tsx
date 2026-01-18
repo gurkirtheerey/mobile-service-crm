@@ -35,7 +35,7 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
       render: (client: ClientWithZone) => (
         <div>
           <p className="font-medium">{client.name}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-foreground-muted">
             {client.id.slice(0, 8)}...
           </p>
         </div>
@@ -47,7 +47,7 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
       render: (client: ClientWithZone) => (
         <div>
           <p>{client.phone || 'No phone'}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-foreground-muted">
             {client.email || 'No email'}
           </p>
         </div>
@@ -59,7 +59,7 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
       render: (client: ClientWithZone) => (
         <div>
           <p>{client.street}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-foreground-muted">
             {client.city}, {client.state} {client.zip}
           </p>
         </div>
@@ -89,7 +89,7 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative">
           <svg
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={2}
@@ -106,14 +106,14 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
             placeholder="Search clients..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:placeholder:text-slate-500 sm:w-64"
+            className="w-full rounded-lg border border-border bg-card py-2 pl-10 pr-4 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:w-64"
           />
         </div>
         <div className="flex items-center gap-2">
           <select
             value={zoneFilter}
             onChange={(e) => setZoneFilter(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800"
+            className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="">All Zones</option>
             {zones.map((zone) => (
@@ -135,7 +135,7 @@ export function ClientsTable({ clients, zones }: ClientsTableProps) {
       />
 
       {/* Summary */}
-      <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+      <div className="mt-4 text-sm text-foreground-muted">
         Showing {filteredClients.length} of {clients.length} clients
       </div>
     </>

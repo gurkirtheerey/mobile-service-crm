@@ -92,10 +92,10 @@ export function AppointmentsCalendar({
         <div className="flex items-center gap-2">
           <button
             onClick={goToPrevWeek}
-            className="rounded-lg border border-slate-200 p-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+            className="rounded-lg border border-border p-2 hover:bg-muted"
           >
             <svg
-              className="h-4 w-4 text-slate-600 dark:text-slate-400"
+              className="h-4 w-4 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
@@ -110,16 +110,16 @@ export function AppointmentsCalendar({
           </button>
           <button
             onClick={goToToday}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+            className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-foreground-secondary hover:bg-muted"
           >
             Today
           </button>
           <button
             onClick={goToNextWeek}
-            className="rounded-lg border border-slate-200 p-2 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+            className="rounded-lg border border-border p-2 hover:bg-muted"
           >
             <svg
-              className="h-4 w-4 text-slate-600 dark:text-slate-400"
+              className="h-4 w-4 text-foreground-secondary"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
@@ -132,7 +132,7 @@ export function AppointmentsCalendar({
               />
             </svg>
           </button>
-          <span className="ml-2 text-lg font-semibold text-slate-900 dark:text-white">
+          <span className="ml-2 text-lg font-semibold text-foreground">
             {weekStart.toLocaleDateString('en-US', {
               month: 'long',
               year: 'numeric',
@@ -143,7 +143,7 @@ export function AppointmentsCalendar({
           <select
             value={selectedZone}
             onChange={(e) => setSelectedZone(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800"
+            className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="">All Zones</option>
             {zones.map((zone) => (
@@ -156,27 +156,27 @@ export function AppointmentsCalendar({
       </div>
 
       {/* Week Calendar */}
-      <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-xl border border-border bg-card">
         {/* Week Header */}
-        <div className="grid grid-cols-7 border-b border-slate-200 dark:border-slate-800">
+        <div className="grid grid-cols-7 border-b border-border">
           {weekDays.map((day, index) => {
             const { day: dayName, date } = formatDayHeader(day);
             const isToday = day.toDateString() === new Date().toDateString();
             return (
               <div
                 key={index}
-                className={`border-r border-slate-200 p-3 text-center last:border-r-0 dark:border-slate-800 ${
-                  isToday ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                className={`border-r border-border p-3 text-center last:border-r-0 ${
+                  isToday ? 'bg-primary/10' : ''
                 }`}
               >
-                <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                <p className="text-xs font-medium text-foreground-muted">
                   {dayName}
                 </p>
                 <p
                   className={`mt-1 text-lg font-semibold ${
                     isToday
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-slate-900 dark:text-white'
+                      ? 'text-primary'
+                      : 'text-foreground'
                   }`}
                 >
                   {date}
@@ -195,8 +195,8 @@ export function AppointmentsCalendar({
             return (
               <div
                 key={index}
-                className={`border-r border-slate-200 p-2 last:border-r-0 dark:border-slate-800 ${
-                  isToday ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
+                className={`border-r border-border p-2 last:border-r-0 ${
+                  isToday ? 'bg-primary/5' : ''
                 }`}
               >
                 <div className="space-y-2">
@@ -208,19 +208,19 @@ export function AppointmentsCalendar({
                     return (
                       <div
                         key={apt.id}
-                        className="cursor-pointer rounded-lg border-l-4 bg-white p-2 shadow-sm transition-shadow hover:shadow dark:bg-slate-800"
+                        className="cursor-pointer rounded-lg border-l-4 bg-background p-2 shadow-sm transition-shadow hover:shadow"
                         style={{ borderLeftColor: zone?.color || '#6B7280' }}
                       >
-                        <p className="text-xs font-medium text-slate-900 dark:text-white">
+                        <p className="text-xs font-medium text-foreground">
                           {new Date(apt.scheduled_start).toLocaleTimeString([], {
                             hour: '2-digit',
                             minute: '2-digit',
                           })}
                         </p>
-                        <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                        <p className="mt-1 text-xs text-foreground-secondary">
                           {client?.name || 'Unknown'}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <p className="text-xs text-foreground-muted">
                           {service?.name || 'Service'}
                         </p>
                       </div>
@@ -235,12 +235,12 @@ export function AppointmentsCalendar({
 
       {/* Appointments List */}
       <div className="mt-6">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+        <h2 className="mb-4 text-lg font-semibold text-foreground">
           All Appointments
         </h2>
-        <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-border bg-card">
           {filteredAppointments.length > 0 ? (
-            <div className="divide-y divide-slate-200 dark:divide-slate-800">
+            <div className="divide-y divide-border">
               {filteredAppointments
                 .sort(
                   (a, b) =>
@@ -262,18 +262,18 @@ export function AppointmentsCalendar({
                         style={{ backgroundColor: zone?.color || '#6B7280' }}
                       />
                       <div className="flex-1">
-                        <p className="font-medium text-slate-900 dark:text-white">
+                        <p className="font-medium text-foreground">
                           {client?.name || 'Unknown'}
                         </p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                        <p className="text-sm text-foreground-muted">
                           {service?.name || 'Service'}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-slate-900 dark:text-white">
+                        <p className="text-sm font-medium text-foreground">
                           {new Date(apt.scheduled_start).toLocaleDateString()}
                         </p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                        <p className="text-sm text-foreground-muted">
                           {new Date(apt.scheduled_start).toLocaleTimeString([], {
                             hour: '2-digit',
                             minute: '2-digit',
@@ -281,7 +281,7 @@ export function AppointmentsCalendar({
                         </p>
                       </div>
                       <StatusBadge status={apt.status} />
-                      <p className="w-16 text-right font-medium text-slate-900 dark:text-white">
+                      <p className="w-16 text-right font-medium text-foreground">
                         ${Number(apt.total_price).toFixed(0)}
                       </p>
                     </div>
@@ -290,7 +290,7 @@ export function AppointmentsCalendar({
             </div>
           ) : (
             <div className="px-6 py-8 text-center">
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-foreground-muted">
                 No appointments found
               </p>
             </div>
